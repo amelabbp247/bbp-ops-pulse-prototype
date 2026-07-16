@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A read-only prototype for BBP onboarding completion and payment plan visibility."
+    />
+    <title>BBP Ops Pulse — Prototype</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Dashboard navigation">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">B</div>
+          <div>
+            <p class="brand-name">BBP Operations</p>
+            <p class="brand-subtitle">Pulse</p>
+          </div>
+        </div>
+
+        <nav class="view-nav" aria-label="Tracker views">
+          <button class="nav-item is-active" data-view-target="onboarding" type="button">
+            <span class="nav-icon" aria-hidden="true">01</span>
+            <span>
+              <strong>Onboarding</strong>
+              <small>Completion tracker</small>
+            </span>
+            <span class="nav-count" id="onboarding-nav-count">0</span>
+          </button>
+          <button class="nav-item" data-view-target="payments" type="button">
+            <span class="nav-icon" aria-hidden="true">02</span>
+            <span>
+              <strong>Payment plans</strong>
+              <small>Balance tracker</small>
+            </span>
+            <span class="nav-count" id="payments-nav-count">0</span>
+          </button>
+          <button class="nav-item" data-view-target="commissions" type="button">
+            <span class="nav-icon" aria-hidden="true">03</span>
+            <span>
+              <strong>Sales Invoice Cross-Checks</strong>
+              <small>Monthly commissions</small>
+            </span>
+          </button>
+          <button class="nav-item" data-view-target="thrive" type="button">
+            <span class="nav-icon" aria-hidden="true">04</span>
+            <span>
+              <strong>Thrive P&amp;L</strong>
+              <small>Monthly net income</small>
+            </span>
+          </button>
+        </nav>
+
+        <div class="sidebar-note">
+          <span class="status-dot" aria-hidden="true"></span>
+          <div>
+            <strong>Prototype mode</strong>
+            <p>Read-only · Dummy data</p>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Operations workspace</p>
+            <h1 id="page-title">Onboarding completion</h1>
+          </div>
+          <div class="topbar-meta">
+            <div class="live-indicator"><span></span> Live timers</div>
+            <div class="avatar" aria-label="Signed in as Amela">AT</div>
+          </div>
+        </header>
+
+        <section class="notice" aria-label="Prototype notice">
+          <div class="notice-icon" aria-hidden="true">i</div>
+          <div>
+            <strong>Concept preview — no live systems connected</strong>
+            <p>
+              All names and amounts are fictional. Nothing on this page can send, edit, or trigger an action.
+            </p>
+          </div>
+        </section>
+
+        <section class="dashboard-view is-active" id="onboarding-view" data-view="onboarding">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">From contract sent to Skool access granted</p>
+              <h2>Client onboarding health</h2>
+            </div>
+            <p class="updated-at">Timers refreshed <span id="onboarding-refreshed">just now</span></p>
+          </div>
+
+          <div class="metric-grid" id="onboarding-metrics" aria-label="Onboarding summary"></div>
+
+          <div class="table-card">
+            <div class="table-toolbar">
+              <label class="search-control">
+                <span class="sr-only">Search onboarding clients</span>
+                <span aria-hidden="true">⌕</span>
+                <input id="onboarding-search" type="search" placeholder="Search client or closer" />
+              </label>
+
+              <div class="filter-group" aria-label="Onboarding filters">
+                <label>
+                  <span class="sr-only">Filter by attention status</span>
+                  <select id="onboarding-status-filter">
+                    <option value="all">All statuses</option>
+                    <option value="escalated">Needs attention / escalated</option>
+                    <option value="onboarding">In onboarding</option>
+                    <option value="complete">Complete</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="sr-only">Filter by product</span>
+                  <select id="onboarding-product-filter">
+                    <option value="all">All products</option>
+                    <option value="Mentorship">Mentorship</option>
+                    <option value="Academy">Academy</option>
+                    <option value="Thrive">Thrive</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="sr-only">Sort onboarding clients</span>
+                  <select id="onboarding-sort">
+                    <option value="priority">Escalations first</option>
+                    <option value="oldest">Oldest sale first</option>
+                    <option value="newest">Newest sale first</option>
+                    <option value="client">Client A–Z</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="active-filter-row">
+              <button class="quick-filter is-active" data-onboarding-quick="all" type="button">Current sample</button>
+              <button class="quick-filter quick-filter-danger" data-onboarding-quick="escalated" type="button">
+                <span class="danger-dot" aria-hidden="true"></span>
+                Needs attention / escalated
+                <span id="escalated-quick-count">0</span>
+              </button>
+              <button class="quick-filter" data-onboarding-quick="onboarding" type="button">In onboarding</button>
+              <button class="quick-filter" data-onboarding-quick="complete" type="button">Complete</button>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Client</th>
+                    <th>Sale</th>
+                    <th>Closer</th>
+                    <th>Product</th>
+                    <th>Contract</th>
+                    <th>Skool Access</th>
+                    <th>Overall</th>
+                  </tr>
+                </thead>
+                <tbody id="onboarding-table-body"></tbody>
+              </table>
+            </div>
+            <div class="empty-state" id="onboarding-empty" hidden>
+              <div aria-hidden="true">✓</div>
+              <h3>No clients match this view</h3>
+              <p>Try clearing a filter or changing the search.</p>
+            </div>
+            <footer class="table-footer">
+              <p>Showing <strong id="onboarding-showing">0</strong> of <span id="onboarding-total">0</span> sample clients</p>
+              <p><span class="legend-swatch"></span> Red rows crossed either 24-hour onboarding threshold</p>
+            </footer>
+          </div>
+        </section>
+
+        <section class="dashboard-view" id="payments-view" data-view="payments" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Clients not paid in full</p>
+              <h2>Payment plan health</h2>
+            </div>
+            <p class="updated-at">Dates calculated <span id="payments-refreshed">just now</span></p>
+          </div>
+
+          <div class="metric-grid" id="payment-metrics" aria-label="Payment plan summary"></div>
+
+          <div class="table-card">
+            <div class="table-toolbar">
+              <label class="search-control">
+                <span class="sr-only">Search payment plan clients</span>
+                <span aria-hidden="true">⌕</span>
+                <input id="payment-search" type="search" placeholder="Search client" />
+              </label>
+
+              <div class="filter-group" aria-label="Payment plan filters">
+                <label>
+                  <span class="sr-only">Filter by payment status</span>
+                  <select id="payment-status-filter">
+                    <option value="all">All statuses</option>
+                    <option value="overdue">Overdue only</option>
+                    <option value="due-soon">Due within 7 days</option>
+                    <option value="upcoming">Upcoming</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="sr-only">Filter payment plans by product</span>
+                  <select id="payment-product-filter">
+                    <option value="all">All products</option>
+                    <option value="Mentorship">Mentorship</option>
+                    <option value="Academy">Academy</option>
+                    <option value="Thrive">Thrive</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="sr-only">Sort payment plan clients</span>
+                  <select id="payment-sort">
+                    <option value="due">Next due first</option>
+                    <option value="balance">Highest balance</option>
+                    <option value="client">Client A–Z</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="active-filter-row">
+              <button class="quick-filter is-active" data-payment-quick="all" type="button">All plans</button>
+              <button class="quick-filter quick-filter-danger" data-payment-quick="overdue" type="button">
+                <span class="danger-dot" aria-hidden="true"></span>
+                Overdue
+                <span id="overdue-quick-count">0</span>
+              </button>
+              <button class="quick-filter" data-payment-quick="due-soon" type="button">Due within 7 days</button>
+              <button class="quick-filter" data-payment-quick="upcoming" type="button">Upcoming</button>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Client</th>
+                    <th>Product</th>
+                    <th>Remaining balance</th>
+                    <th>Next payment due</th>
+                    <th>Time to due date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="payment-table-body"></tbody>
+              </table>
+            </div>
+            <div class="empty-state" id="payment-empty" hidden>
+              <div aria-hidden="true">✓</div>
+              <h3>No payment plans match this view</h3>
+              <p>Try clearing a filter or changing the search.</p>
+            </div>
+            <footer class="table-footer">
+              <p>Showing <strong id="payment-showing">0</strong> of <span id="payment-total">0</span> payment plans</p>
+              <p><span class="legend-swatch"></span> Red rows have passed their payment due date</p>
+            </footer>
+          </div>
+        </section>
+
+        <section class="dashboard-view" id="commissions-view" data-view="commissions" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Based on payments received in the selected month</p>
+              <h2>Sales invoice cross-checks</h2>
+            </div>
+            <label class="month-control">
+              <span>Month</span>
+              <select id="commission-month"></select>
+            </label>
+          </div>
+
+          <div class="person-tabs" id="commission-person-tabs" aria-label="Commission person"></div>
+          <div class="metric-grid" id="commission-metrics" aria-label="Commission summary"></div>
+
+          <div class="table-card">
+            <div class="table-toolbar commission-toolbar">
+              <div>
+                <p class="toolbar-title" id="commission-table-title"></p>
+                <p class="toolbar-subtitle">Only payments that landed during the selected month are included.</p>
+              </div>
+              <button class="action-button" id="add-bonus-button" type="button">+ Add Bonus</button>
+            </div>
+            <div class="table-scroll">
+              <table class="commission-table">
+                <thead>
+                  <tr>
+                    <th>Payment received</th>
+                    <th>Client</th>
+                    <th>Product</th>
+                    <th>Payment type</th>
+                    <th>Amount received</th>
+                    <th>Rate</th>
+                    <th>Commission</th>
+                  </tr>
+                </thead>
+                <tbody id="commission-table-body"></tbody>
+              </table>
+            </div>
+            <div class="empty-state" id="commission-empty" hidden>
+              <div aria-hidden="true">$</div>
+              <h3>No received payments for this person and month</h3>
+              <p>Switch the month or select another team member.</p>
+            </div>
+            <footer class="table-footer">
+              <p id="commission-footer-count"></p>
+              <p>Setter rate: 5% · Closer rate: 10%</p>
+            </footer>
+          </div>
+        </section>
+
+        <section class="dashboard-view" id="thrive-view" data-view="thrive" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Thrive payments received less program costs</p>
+              <h2>Thrive monthly P&amp;L</h2>
+            </div>
+            <label class="month-control">
+              <span>Month</span>
+              <select id="thrive-month"></select>
+            </label>
+          </div>
+
+          <div class="metric-grid" id="thrive-metrics" aria-label="Thrive profit and loss summary"></div>
+
+          <div class="pnl-grid">
+            <section class="table-card pnl-card">
+              <div class="pnl-card-heading">
+                <div>
+                  <p class="section-kicker">Revenue detail</p>
+                  <h3>Thrive payments received</h3>
+                </div>
+                <strong id="thrive-revenue-total"></strong>
+              </div>
+              <div id="thrive-revenue-list" class="pnl-list"></div>
+            </section>
+
+            <section class="table-card pnl-card">
+              <div class="pnl-card-heading">
+                <div>
+                  <p class="section-kicker">Costs</p>
+                  <h3>Monthly deductions</h3>
+                </div>
+                <strong id="thrive-cost-total"></strong>
+              </div>
+              <div id="thrive-cost-list" class="pnl-list"></div>
+            </section>
+          </div>
+
+          <section class="pnl-result" aria-label="Thrive net income distribution">
+            <div>
+              <span>Net income</span>
+              <strong id="thrive-net-income"></strong>
+              <small>Revenue minus salaries, tools, and Stripe fees</small>
+            </div>
+            <div class="pnl-result-highlight">
+              <span>20% owed to Briony</span>
+              <strong id="thrive-briony-share"></strong>
+              <small>Calculated from net income</small>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
