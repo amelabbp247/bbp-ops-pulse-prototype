@@ -5,25 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="A read-only prototype for BBP onboarding completion and payment plan visibility."
+      content="An interactive prototype for BBP role-based operations, onboarding, compensation, and approvals."
     />
     <title>BBP Ops Pulse — Prototype</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=13" />
   </head>
   <body>
-    <div class="app-shell">
+    <section class="prototype-launcher" id="prototype-launcher" aria-labelledby="launcher-title">
+      <div class="launcher-inner">
+        <div class="launcher-heading">
+          <div class="brand-mark launcher-mark" aria-hidden="true">B</div>
+          <p>Bye Bye Panic</p>
+          <h1 id="launcher-title">Choose a dashboard preview</h1>
+          <span>Six role-based concepts · Dummy data only</span>
+        </div>
+        <div class="launcher-grid">
+          <button class="launcher-card is-leadership" data-launch-persona="shaan" type="button">
+            <span class="launcher-card-index">01</span><strong>BBP Leadership</strong><small>Shaan Kassam</small>
+          </button>
+          <button class="launcher-card is-operations" data-launch-persona="amela" type="button">
+            <span class="launcher-card-index">02</span><strong>BBP Operations</strong><small>Amela Tufo</small>
+          </button>
+          <button class="launcher-card is-sales" data-launch-persona="matt" type="button">
+            <span class="launcher-card-index">03</span><strong>BBP Sales Lead</strong><small>Matt McCaffer</small>
+          </button>
+          <button class="launcher-card is-sales-manager" data-launch-persona="ali" type="button">
+            <span class="launcher-card-index">04</span><strong>BBP Sales Manager</strong><small>Ali</small>
+          </button>
+          <button class="launcher-card is-customer-success" data-launch-persona="emily" type="button">
+            <span class="launcher-card-index">05</span><strong>BBP Customer Success</strong><small>Emily Hall</small>
+          </button>
+          <button class="launcher-card is-thrive" data-launch-persona="briony" type="button">
+            <span class="launcher-card-index">06</span><strong>BBP Thrive</strong><small>Briony McKenzie</small>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="app-shell" id="app-shell" hidden>
       <aside class="sidebar" aria-label="Dashboard navigation">
+        <button class="launcher-back" id="launcher-back" type="button">← All dashboard previews</button>
         <div class="brand">
-          <div class="brand-mark" aria-hidden="true">B</div>
-          <div>
-            <p class="brand-name">BBP Operations</p>
-            <p class="brand-subtitle">Pulse</p>
+          <div class="brand-row">
+            <div class="brand-mark" aria-hidden="true">B</div>
+            <div>
+              <p class="brand-name" id="workspace-name">BBP Operations</p>
+              <p class="brand-subtitle" id="workspace-subtitle">Operations workspace</p>
+            </div>
           </div>
         </div>
 
         <nav class="view-nav" aria-label="Tracker views">
-          <button class="nav-item is-active" data-view-target="onboarding" type="button">
+          <button class="nav-item is-active" data-view-target="transactions" type="button">
             <span class="nav-icon" aria-hidden="true">01</span>
+            <span>
+              <strong>All Transactions</strong>
+              <small>Revenue and refunds</small>
+            </span>
+          </button>
+          <button class="nav-item is-active" data-view-target="onboarding" type="button">
+            <span class="nav-icon" aria-hidden="true">02</span>
             <span>
               <strong>Onboarding</strong>
               <small>Completion tracker</small>
@@ -31,7 +72,7 @@
             <span class="nav-count" id="onboarding-nav-count">0</span>
           </button>
           <button class="nav-item" data-view-target="payments" type="button">
-            <span class="nav-icon" aria-hidden="true">02</span>
+            <span class="nav-icon" aria-hidden="true">03</span>
             <span>
               <strong>Payment plans</strong>
               <small>Balance tracker</small>
@@ -39,18 +80,33 @@
             <span class="nav-count" id="payments-nav-count">0</span>
           </button>
           <button class="nav-item" data-view-target="commissions" type="button">
-            <span class="nav-icon" aria-hidden="true">03</span>
+            <span class="nav-icon" aria-hidden="true">04</span>
             <span>
-              <strong>Sales Invoice Cross-Checks</strong>
-              <small>Monthly commissions</small>
+              <strong id="sales-nav-label">Sales Invoice Cross-Checks</strong>
+              <small id="sales-nav-subtitle">Monthly commissions</small>
             </span>
           </button>
           <button class="nav-item" data-view-target="thrive" type="button">
-            <span class="nav-icon" aria-hidden="true">04</span>
+            <span class="nav-icon" aria-hidden="true">05</span>
             <span>
               <strong>Thrive P&amp;L</strong>
               <small>Monthly net income</small>
             </span>
+          </button>
+          <button class="nav-item" data-view-target="csm" type="button">
+            <span class="nav-icon" aria-hidden="true">06</span>
+            <span>
+              <strong>CSM Compensation</strong>
+              <small>Renewals and bonuses</small>
+            </span>
+          </button>
+          <button class="nav-item" data-view-target="admin" type="button">
+            <span class="nav-icon" aria-hidden="true">07</span>
+            <span>
+              <strong id="admin-nav-label">Admin &amp; Access</strong>
+              <small id="admin-nav-subtitle">People and exceptions</small>
+            </span>
+            <span class="nav-count" id="admin-nav-count">0</span>
           </button>
         </nav>
 
@@ -58,7 +114,7 @@
           <span class="status-dot" aria-hidden="true"></span>
           <div>
             <strong>Prototype mode</strong>
-            <p>Read-only · Dummy data</p>
+            <p>Interactive · Dummy data only</p>
           </div>
         </div>
       </aside>
@@ -66,22 +122,115 @@
       <main class="main-content">
         <header class="topbar">
           <div>
-            <p class="eyebrow">Operations workspace</p>
+            <p class="eyebrow" id="workspace-eyebrow">Operations workspace</p>
             <h1 id="page-title">Onboarding completion</h1>
           </div>
           <div class="topbar-meta">
             <div class="live-indicator"><span></span> Live timers</div>
-            <div class="avatar" aria-label="Signed in as Amela">AT</div>
+            <div class="avatar" id="topbar-avatar" aria-label="Current prototype persona">AT</div>
           </div>
         </header>
 
         <section class="notice" aria-label="Prototype notice">
           <div class="notice-icon" aria-hidden="true">i</div>
           <div>
-            <strong>Concept preview — no live systems connected</strong>
+            <strong>Interactive concept preview — no live systems connected</strong>
             <p>
-              All names and amounts are fictional. Nothing on this page can send, edit, or trigger an action.
+              Client records are fictional. Reviews and approvals update only this browser session and do not trigger real actions.
             </p>
+          </div>
+        </section>
+
+        <section class="dashboard-view" id="transactions-view" data-view="transactions" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Revenue movement only · operating costs excluded</p>
+              <h2>All revenue and refund transactions</h2>
+            </div>
+            <label class="month-control">
+              <span>Month</span>
+              <select id="transaction-month"></select>
+            </label>
+          </div>
+
+          <div class="metric-grid" id="transaction-metrics" aria-label="Transaction summary"></div>
+
+          <div class="product-summary">
+            <div class="product-summary-heading">
+              <div>
+                <p class="section-kicker">Net received by product</p>
+                <h3>Product breakdown</h3>
+              </div>
+              <span>Revenue less refunds</span>
+            </div>
+            <div class="product-breakdown-grid" id="transaction-product-breakdown"></div>
+          </div>
+
+          <div class="table-card">
+            <div class="table-toolbar">
+              <label class="search-control">
+                <span class="sr-only">Search transactions</span>
+                <span aria-hidden="true">⌕</span>
+                <input id="transaction-search" type="search" placeholder="Search name, product, or processor" />
+              </label>
+
+              <div class="filter-group" aria-label="Transaction filters">
+                <label>
+                  <span class="sr-only">Filter transactions by product</span>
+                  <select id="transaction-product-filter">
+                    <option value="all">All products</option>
+                    <option value="Mentorship">Mentorship</option>
+                    <option value="Academy">Academy</option>
+                    <option value="Thrive">Thrive</option>
+                    <option value="Continuity">Continuity</option>
+                    <option value="Accelerator">Accelerator</option>
+                    <option value="Desensitization Blueprint">Desensitization Blueprint</option>
+                    <option value="Shaan AI">Shaan AI</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="sr-only">Filter transaction type</span>
+                  <select id="transaction-type-filter">
+                    <option value="all">All transactions</option>
+                    <option value="revenue">Revenue only</option>
+                    <option value="refund">Refunds only</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="sr-only">Sort transactions</span>
+                  <select id="transaction-sort">
+                    <option value="newest">Newest sale first</option>
+                    <option value="oldest">Earliest sale first</option>
+                    <option value="amount">Highest amount</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="table-scroll">
+              <table class="transactions-table">
+                <thead>
+                  <tr>
+                    <th>Sale / refund date</th>
+                    <th>Client name</th>
+                    <th>Product</th>
+                    <th>Amount</th>
+                    <th>Processor</th>
+                    <th>Landed in</th>
+                  </tr>
+                </thead>
+                <tbody id="transaction-table-body"></tbody>
+              </table>
+            </div>
+            <div class="empty-state" id="transaction-empty" hidden>
+              <div aria-hidden="true">⌕</div>
+              <h3>No transactions match this view</h3>
+              <p>Try changing the month, product, or search.</p>
+            </div>
+            <footer class="table-footer">
+              <p>Showing <strong id="transaction-showing">0</strong> of <span id="transaction-total">0</span> sample transactions</p>
+              <p>Revenue activity only · salaries and operating costs are excluded</p>
+            </footer>
           </div>
         </section>
 
@@ -101,19 +250,10 @@
               <label class="search-control">
                 <span class="sr-only">Search onboarding clients</span>
                 <span aria-hidden="true">⌕</span>
-                <input id="onboarding-search" type="search" placeholder="Search client or closer" />
+                <input id="onboarding-search" type="search" placeholder="Search client, email, or closer" />
               </label>
 
-              <div class="filter-group" aria-label="Onboarding filters">
-                <label>
-                  <span class="sr-only">Filter by attention status</span>
-                  <select id="onboarding-status-filter">
-                    <option value="all">All statuses</option>
-                    <option value="escalated">Needs attention / escalated</option>
-                    <option value="onboarding">In onboarding</option>
-                    <option value="complete">Complete</option>
-                  </select>
-                </label>
+              <div class="filter-group" aria-label="Onboarding filter">
                 <label>
                   <span class="sr-only">Filter by product</span>
                   <select id="onboarding-product-filter">
@@ -123,26 +263,11 @@
                     <option value="Thrive">Thrive</option>
                   </select>
                 </label>
-                <label>
-                  <span class="sr-only">Sort onboarding clients</span>
-                  <select id="onboarding-sort">
-                    <option value="priority">Escalations first</option>
-                    <option value="oldest">Oldest sale first</option>
-                    <option value="newest">Newest sale first</option>
-                    <option value="client">Client A–Z</option>
-                  </select>
-                </label>
               </div>
             </div>
 
             <div class="active-filter-row">
-              <button class="quick-filter is-active" data-onboarding-quick="all" type="button">Current sample</button>
-              <button class="quick-filter quick-filter-danger" data-onboarding-quick="escalated" type="button">
-                <span class="danger-dot" aria-hidden="true"></span>
-                Needs attention / escalated
-                <span id="escalated-quick-count">0</span>
-              </button>
-              <button class="quick-filter" data-onboarding-quick="onboarding" type="button">In onboarding</button>
+              <button class="quick-filter is-active" data-onboarding-quick="active" type="button">Currently onboarding <span id="active-onboarding-quick-count">0</span></button>
               <button class="quick-filter" data-onboarding-quick="complete" type="button">Complete</button>
             </div>
 
@@ -150,13 +275,16 @@
               <table>
                 <thead>
                   <tr>
-                    <th>Client</th>
-                    <th>Sale</th>
+                    <th>Client name</th>
+                    <th>Client email</th>
+                    <th>Sale date</th>
+                    <th>Sale type</th>
                     <th>Closer</th>
+                    <th>CSM</th>
                     <th>Product</th>
                     <th>Contract</th>
                     <th>Skool Access</th>
-                    <th>Overall</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody id="onboarding-table-body"></tbody>
@@ -190,37 +318,9 @@
               <label class="search-control">
                 <span class="sr-only">Search payment plan clients</span>
                 <span aria-hidden="true">⌕</span>
-                <input id="payment-search" type="search" placeholder="Search client" />
+                <input id="payment-search" type="search" placeholder="Search client, email, or salesperson" />
               </label>
 
-              <div class="filter-group" aria-label="Payment plan filters">
-                <label>
-                  <span class="sr-only">Filter by payment status</span>
-                  <select id="payment-status-filter">
-                    <option value="all">All statuses</option>
-                    <option value="overdue">Overdue only</option>
-                    <option value="due-soon">Due within 7 days</option>
-                    <option value="upcoming">Upcoming</option>
-                  </select>
-                </label>
-                <label>
-                  <span class="sr-only">Filter payment plans by product</span>
-                  <select id="payment-product-filter">
-                    <option value="all">All products</option>
-                    <option value="Mentorship">Mentorship</option>
-                    <option value="Academy">Academy</option>
-                    <option value="Thrive">Thrive</option>
-                  </select>
-                </label>
-                <label>
-                  <span class="sr-only">Sort payment plan clients</span>
-                  <select id="payment-sort">
-                    <option value="due">Next due first</option>
-                    <option value="balance">Highest balance</option>
-                    <option value="client">Client A–Z</option>
-                  </select>
-                </label>
-              </div>
             </div>
 
             <div class="active-filter-row">
@@ -238,8 +338,11 @@
               <table>
                 <thead>
                   <tr>
-                    <th>Client</th>
+                    <th>Client name</th>
+                    <th>Client email</th>
                     <th>Product</th>
+                    <th>Setter</th>
+                    <th>Closer</th>
                     <th>Remaining balance</th>
                     <th>Next payment due</th>
                     <th>Time to due date</th>
@@ -264,7 +367,7 @@
         <section class="dashboard-view" id="commissions-view" data-view="commissions" hidden>
           <div class="section-heading">
             <div>
-              <p class="section-kicker">Based on payments received in the selected month</p>
+              <p class="section-kicker">Closer cash collected · setter contract value</p>
               <h2>Sales invoice cross-checks</h2>
             </div>
             <label class="month-control">
@@ -274,32 +377,40 @@
           </div>
 
           <div class="person-tabs" id="commission-person-tabs" aria-label="Commission person"></div>
+          <div class="scope-banner" id="commission-scope-banner"></div>
           <div class="metric-grid" id="commission-metrics" aria-label="Commission summary"></div>
 
           <div class="table-card">
             <div class="table-toolbar commission-toolbar">
               <div>
                 <p class="toolbar-title" id="commission-table-title"></p>
-                <p class="toolbar-subtitle">Only payments that landed during the selected month are included.</p>
+                <p class="toolbar-subtitle" id="commission-table-subtitle"></p>
               </div>
-              <button class="action-button" id="add-bonus-button" type="button">+ Add Bonus</button>
+              <div class="commission-toolbar-actions">
+                <button class="secondary-button" id="add-clawback-button" type="button">+ Add clawback</button>
+                <button class="icon-menu-button" id="add-bonus-button" type="button" aria-label="Add bonus or adjustment" title="Add bonus or adjustment">•••</button>
+              </div>
             </div>
             <div class="table-scroll">
               <table class="commission-table">
                 <thead>
                   <tr>
-                    <th>Payment received</th>
+                    <th id="commission-date-heading">Payment received</th>
                     <th>Client</th>
+                    <th id="commission-counterpart-heading">Setter / closer</th>
                     <th>Product</th>
-                    <th>Payment type</th>
-                    <th>Amount received</th>
+                    <th id="commission-type-heading">Payment type</th>
+                    <th id="commission-basis-heading">Amount received</th>
                     <th>Rate</th>
                     <th>Commission</th>
+                    <th>Edit status</th>
+                    <th aria-label="Transaction actions"></th>
                   </tr>
                 </thead>
                 <tbody id="commission-table-body"></tbody>
               </table>
             </div>
+            <div class="invoice-breakdown" id="commission-invoice-breakdown"></div>
             <div class="empty-state" id="commission-empty" hidden>
               <div aria-hidden="true">$</div>
               <h3>No received payments for this person and month</h3>
@@ -307,9 +418,22 @@
             </div>
             <footer class="table-footer">
               <p id="commission-footer-count"></p>
-              <p>Setter rate: 5% · Closer rate: 10%</p>
+              <p>Setter: 5% of contract value · Closer: 10% of collected cash</p>
             </footer>
           </div>
+
+          <section class="approval-card" aria-label="Monthly sales invoice approval">
+            <div class="approval-heading">
+              <div>
+                <p class="section-kicker">Monthly invoice workflow</p>
+                <h3 id="invoice-heading">July invoice review</h3>
+              </div>
+              <span id="invoice-status"></span>
+            </div>
+            <div class="approval-steps" id="invoice-steps"></div>
+            <div class="approval-note" id="invoice-note"></div>
+            <div class="approval-actions" id="invoice-actions"></div>
+          </section>
         </section>
 
         <section class="dashboard-view" id="thrive-view" data-view="thrive" hidden>
@@ -362,10 +486,182 @@
               <small>Calculated from net income</small>
             </div>
           </section>
+
+          <section class="table-card thrive-ledger-card" aria-label="All Thrive transactions">
+            <div class="table-toolbar">
+              <div>
+                <p class="toolbar-title">All Thrive transactions</p>
+                <p class="toolbar-subtitle">Full monthly visibility into income, installments, refunds, and processing fees.</p>
+              </div>
+              <label>
+                <span class="sr-only">Filter Thrive transactions</span>
+                <select id="thrive-transaction-filter">
+                  <option value="all">All transactions</option>
+                  <option value="income">Income only</option>
+                  <option value="refunds">Refunds only</option>
+                </select>
+              </label>
+            </div>
+            <div class="table-scroll">
+              <table class="thrive-ledger-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Transaction</th>
+                    <th>Gross amount</th>
+                    <th>Stripe fee</th>
+                    <th>Net movement</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="thrive-transaction-body"></tbody>
+              </table>
+            </div>
+            <div class="empty-state" id="thrive-transaction-empty" hidden>
+              <div aria-hidden="true">$</div>
+              <h3>No Thrive transactions match this view</h3>
+              <p>Change the month or transaction filter.</p>
+            </div>
+            <footer class="table-footer">
+              <p id="thrive-transaction-count"></p>
+              <p>Prototype ledger · dummy financial data</p>
+            </footer>
+          </section>
+        </section>
+
+        <section class="dashboard-view" id="csm-view" data-view="csm" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Effective July 1, 2026</p>
+              <h2>Member Success compensation</h2>
+            </div>
+            <div class="heading-actions">
+              <button class="secondary-button" id="assign-csm-event-button" type="button">+ Assign extension / ascension</button>
+              <label class="month-control">
+                <span>Month</span>
+                <select id="csm-month"></select>
+              </label>
+            </div>
+          </div>
+
+          <div class="person-tabs" id="csm-person-tabs" aria-label="Member Success person"></div>
+          <div class="metric-grid" id="csm-metrics" aria-label="Member Success compensation summary"></div>
+          <div class="pnl-grid">
+            <section class="table-card pnl-card">
+              <div class="pnl-card-heading">
+                <div>
+                  <p class="section-kicker">Qualified events</p>
+                  <h3>Renewals, ascensions, and referrals</h3>
+                </div>
+                <strong id="csm-event-total"></strong>
+              </div>
+              <div id="csm-event-list" class="pnl-list"></div>
+            </section>
+            <section class="table-card pnl-card">
+              <div class="pnl-card-heading">
+                <div>
+                  <p class="section-kicker">Rate card</p>
+                  <h3 id="csm-rate-title">Compensation rules</h3>
+                </div>
+              </div>
+              <div id="csm-rate-list" class="pnl-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="dashboard-view" id="admin-view" data-view="admin" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker" id="admin-section-kicker">Prototype administration</p>
+              <h2 id="admin-section-title">People, access, and exceptions</h2>
+            </div>
+            <button class="action-button" id="add-person-button" type="button">+ Add person</button>
+          </div>
+
+          <div class="metric-grid" id="admin-metrics" aria-label="Administration summary"></div>
+          <div class="admin-grid">
+            <section class="table-card">
+              <div class="table-toolbar">
+                <div>
+                  <p class="toolbar-title">Access directory</p>
+                  <p class="toolbar-subtitle">Module access and financial restrictions are separate.</p>
+                </div>
+              </div>
+              <div class="table-scroll">
+                <table class="admin-table">
+                  <thead>
+                    <tr><th>Person</th><th>Department</th><th>Scope</th><th>Modules</th><th>Sensitive finance</th><th>Action</th></tr>
+                  </thead>
+                  <tbody id="admin-access-body"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="table-card exception-card">
+              <div class="table-toolbar">
+                <div>
+                  <p class="toolbar-title">Assignment exceptions</p>
+                  <p class="toolbar-subtitle">Missing setter assignments route to Matt.</p>
+                </div>
+              </div>
+              <div id="assignment-exceptions" class="exception-list"></div>
+            </section>
+
+            <section class="table-card exception-card" id="commission-approval-queue-card">
+              <div class="table-toolbar">
+                <div>
+                  <p class="toolbar-title">Sales commissions sent for approval</p>
+                  <p class="toolbar-subtitle">Invoices that have completed Amela's review and now need Matt.</p>
+                </div>
+              </div>
+              <div id="commission-approval-queue" class="exception-list"></div>
+            </section>
+          </div>
         </section>
       </main>
     </div>
 
-    <script src="app.js"></script>
+    <div class="client-modal" id="client-modal" hidden>
+      <button class="client-modal-backdrop" type="button" data-close-client-modal aria-label="Close client details"></button>
+      <section class="client-modal-panel" role="dialog" aria-modal="true" aria-labelledby="client-modal-title">
+        <button class="client-modal-close" type="button" data-close-client-modal aria-label="Close client details">×</button>
+        <div id="client-modal-content"></div>
+      </section>
+    </div>
+
+    <div class="commission-entry-modal" id="commission-entry-modal" hidden>
+      <button class="client-modal-backdrop" type="button" data-close-commission-modal aria-label="Close transaction editor"></button>
+      <section class="commission-entry-panel" role="dialog" aria-modal="true" aria-labelledby="commission-entry-title">
+        <button class="client-modal-close" type="button" data-close-commission-modal aria-label="Close transaction editor">×</button>
+        <div class="commission-entry-heading">
+          <p id="commission-entry-kicker">Transaction review</p>
+          <h2 id="commission-entry-title">Edit transaction</h2>
+          <span id="commission-entry-context"></span>
+        </div>
+        <form id="commission-entry-form">
+          <input id="commission-entry-id" type="hidden" />
+          <input id="commission-entry-mode" type="hidden" />
+          <div class="commission-entry-grid">
+            <label><span>Date</span><input id="commission-entry-date" type="date" required /></label>
+            <label><span>Client name</span><input id="commission-entry-client" type="text" required /></label>
+            <label class="wide-field"><span>Client email</span><input id="commission-entry-email" type="email" required /></label>
+            <label><span>Product</span><select id="commission-entry-product"><option>Mentorship</option><option>Academy</option><option>Thrive</option></select></label>
+            <label><span>Payment type</span><input id="commission-entry-type" type="text" required /></label>
+            <label><span>Amount received</span><input id="commission-entry-amount" type="number" step="0.01" required /></label>
+            <label><span>Contract value</span><input id="commission-entry-contract" type="number" min="0" step="0.01" required /></label>
+            <label><span>Setter</span><select id="commission-entry-setter"><option value="">Unassigned</option><option>Whitney</option><option>Rachelle</option></select></label>
+            <label><span>Closer</span><select id="commission-entry-closer"><option value="">Unassigned</option><option>Ali</option><option>Robyn</option></select></label>
+            <label class="wide-field"><span>Reason for change</span><textarea id="commission-entry-reason" rows="3" required></textarea></label>
+          </div>
+          <div class="commission-entry-actions">
+            <button class="secondary-button" type="button" data-close-commission-modal>Cancel</button>
+            <button class="action-button" type="submit" id="commission-entry-submit">Save proposed edit</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <script src="app.js?v=13"></script>
   </body>
 </html>
