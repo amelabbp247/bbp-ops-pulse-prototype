@@ -1052,7 +1052,7 @@ function renderAccessShell() {
   };
   document.body.dataset.theme = themeByDepartment[person.department] || "neutral";
   document.getElementById("workspace-name").textContent = person.workspace;
-  document.getElementById("workspace-subtitle").textContent = person.name;
+  document.getElementById("workspace-subtitle").textContent = person.id === "amela" ? `${person.name} · AT` : person.name;
   document.getElementById("topbar-avatar").textContent = initials(person.name);
   let visibleIndex = 0;
   document.querySelectorAll("[data-view-target]").forEach((button) => {
